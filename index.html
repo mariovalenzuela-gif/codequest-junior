@@ -1,1 +1,170 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CodeQuest Junior</title></head><body><h1>CodeQuest Junior</h1><p>Prueba de publicación.</p></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CodeQuest Galaxy — Retos de programación por alumno</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Arial,sans-serif;color:#fff;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(84,190,255,.25),transparent 24%),
+    radial-gradient(circle at 85% 80%,rgba(170,90,255,.22),transparent 28%),
+    linear-gradient(135deg,#101936,#241052 55%,#0d2444);
+  min-height:100vh;
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;
+  background-image:radial-gradient(#fff 1px,transparent 1px);background-size:42px 42px}
+#app{max-width:1160px;margin:auto;padding:18px}
+.top{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-bot{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#55d7ff,#7367ff);font-size:34px;box-shadow:0 8px 24px #0005;border:3px solid #fff5}
+h1{margin:0;font-size:30px;letter-spacing:.3px}
+.subtitle{margin:3px 0 0;color:#b9d7ff;font-size:13px;font-weight:700}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:#18294cdd;border:1px solid #5f8dd955;padding:9px 14px;border-radius:999px;box-shadow:0 5px 18px #0003}
+.panel{background:#f5f8ff;color:#18213b;border-radius:24px;padding:18px;margin-top:16px;box-shadow:0 18px 50px #0005;border:2px solid #ffffff22}
+.levels{display:flex;gap:9px;overflow:auto;padding:4px 2px 12px}
+.lv{min-width:46px;height:46px;border:0;border-radius:15px;background:#dbe4f5;color:#243352;cursor:pointer;font-weight:900;
+  box-shadow:0 3px 0 #a9b9d3;transition:.15s}
+.lv:hover:not(:disabled){transform:translateY(-2px)}
+.lv.active{background:linear-gradient(145deg,#ffb52e,#ff6b4a);color:#fff;box-shadow:0 4px 0 #cf4e35}
+.lv.done{background:linear-gradient(145deg,#4edb9b,#19a978);color:#fff;box-shadow:0 4px 0 #11805c}
+.lv.locked{background:#aeb8ca;color:#eef2fa;cursor:not-allowed;opacity:.65}
+.mission{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}
+h2{margin:3px 0 6px;font-size:24px}
+.desc{margin:0 0 8px;color:#50617f}
+.hint{background:linear-gradient(90deg,#fff7ce,#eef7ff);padding:11px 13px;border-left:5px solid #ffad32;border-radius:12px;margin-top:9px}
+.tip{background:#17233e;color:#dff4ff;border-left-color:#5ad5ff}
+.game{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-top:16px}
+.board{background:linear-gradient(145deg,#182b52,#14203d);border-radius:22px;padding:15px;box-shadow:inset 0 0 0 2px #ffffff12}
+.board-head{display:flex;justify-content:space-between;align-items:center;color:#a9d8ff;font-size:13px;font-weight:800;margin:0 3px 10px}
+.grid{display:grid;gap:5px;max-width:580px;margin:auto;padding:6px;border-radius:16px;background:#0b1429}
+.cell{aspect-ratio:1;border-radius:9px;background:linear-gradient(145deg,#263b62,#1e3153);display:flex;align-items:center;justify-content:center;font-size:27px;
+  box-shadow:inset 0 0 0 1px #ffffff0d;transition:.15s}
+.wall{background:linear-gradient(145deg,#3b4560,#20283e);font-size:22px}
+.goal{background:radial-gradient(circle,#5cf4c4,#1b9b80);box-shadow:0 0 14px #35e5bd88}
+.hero{background:radial-gradient(circle,#ffe27a,#f39b32);box-shadow:0 0 18px #ffc34c99;transform:scale(1.02)}
+.enemy{background:radial-gradient(circle,#ff8290,#8e2855);box-shadow:0 0 16px #ff507a88}
+.coin{background:radial-gradient(circle,#fff18b,#d99c20);box-shadow:0 0 15px #ffd54d88}
+.editor{margin-top:14px}.editor label{display:block;margin-bottom:7px;color:#fff;font-size:14px}
+.editor textarea{width:100%;min-height:190px;resize:vertical;border:2px solid #50698f;border-radius:14px;padding:13px;background:#080f20;color:#cfff78;
+  font:15px/1.55 monospace;outline:none;box-shadow:inset 0 0 20px #0005}
+.editor textarea:focus{border-color:#5bd9ff;box-shadow:0 0 0 3px #5bd9ff22,inset 0 0 20px #0005}
+.syntax{margin-top:8px;font-size:12px;color:#b4c8e7;line-height:1.8}.syntax code{background:#243757;color:#e5f4ff;padding:4px 6px;border-radius:6px}
+.side-card{background:linear-gradient(145deg,#eef5ff,#fff);border:2px solid #d9e4f5;border-radius:18px;padding:14px;box-shadow:0 8px 25px #20335a12}
+.side-title{display:flex;align-items:center;gap:8px;margin:0 0 10px;color:#263b61}
+.code{background:#091224;color:#d9ff8a;border-radius:14px;padding:14px;min-height:190px;font-family:monospace;white-space:pre-wrap;border:2px solid #263d64;overflow:auto}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.controls button,.actions button{border:0;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:900;color:white;box-shadow:0 4px 0 #183d72;transition:.12s}
+.actions button:hover:not(:disabled){transform:translateY(-2px)}
+#run{background:linear-gradient(145deg,#31b9ff,#2874e6)}
+#clear{background:#687892}.actions button:not(#run):not(#clear){background:linear-gradient(145deg,#ffad36,#f06a42)}
+.actions button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.message{min-height:38px;font-weight:900;margin-top:10px;padding:8px 10px;border-radius:10px}
+@media(max-width:760px){.game{grid-template-columns:1fr}h1{font-size:24px}.cell{font-size:20px}.logo-bot{width:48px;height:48px;font-size:28px}}
+ .save-note{max-width:1100px;margin:8px auto 0;color:#cbd5e1;font-size:13px} 
+.profile-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(7,13,35,.92);backdrop-filter:blur(7px)}
+.profile-card{width:min(560px,100%);background:#f5f8ff;color:#18213b;border-radius:28px;padding:28px;box-shadow:0 25px 80px #0008;border:3px solid #ffffff33}
+.profile-card h2{font-size:30px;text-align:center;margin:0 0 8px}.profile-card p{text-align:center;color:#5a6b88;margin:0 0 20px}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.profile-card label{display:block;font-weight:800;margin-bottom:6px}.profile-card input,.profile-card select{width:100%;padding:13px;border:2px solid #d5ddec;border-radius:13px;font-size:16px;background:#fff;color:#18213b}
+.profile-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.profile-actions button{flex:1;min-width:150px;padding:13px 15px;border:0;border-radius:13px;font-weight:900;cursor:pointer;background:linear-gradient(145deg,#5bd6ff,#6b62ff);color:white}.profile-actions button.secondary{background:#e6edf8;color:#253858}.profile-msg{min-height:22px;margin-top:10px;text-align:center;font-weight:800;color:#d34d43}.profile-current{display:flex;align-items:center;gap:8px;background:#17233e;color:#e5f5ff;padding:9px 13px;border-radius:12px;font-weight:800}.profile-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.profile-tools button{padding:8px 11px;border:1px solid #8aa0c5;border-radius:10px;background:#fff;color:#263858;font-weight:800;cursor:pointer}.profile-list{margin-top:16px;display:grid;gap:8px}.profile-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:#eef3fb;border-radius:12px}.profile-item button{border:0;background:#5b6ee1;color:#fff;border-radius:9px;padding:7px 10px;font-weight:800;cursor:pointer}.profile-item small{color:#63728c}@media(max-width:620px){.profile-grid{grid-template-columns:1fr}}
+.export-box{background:#eef6ff;border:2px dashed #8aa8d5;border-radius:14px;padding:12px;margin-top:12px}.export-code{font-family:monospace;word-break:break-all;background:#fff;padding:10px;border-radius:9px;margin-top:8px;user-select:all}.student-help{background:#fff8db;border:2px solid #f0d36b;border-radius:14px;padding:10px 12px;margin-top:10px;color:#4b3b00}.student-help b{color:#2b235a}
+</style>
+</head>
+<body>
+
+<div id="profileOverlay" class="profile-overlay">
+  <div class="profile-card">
+    <h2>🚀 CodeQuest Junior</h2>
+    <p><b>¡Hola, programador!</b> 👋<br>Escribe tu nombre y tu grupo para entrar a tu partida.</p>
+    <div id="profileCurrent" class="profile-current" style="display:none"></div>
+    <div id="profileForm">
+      <div class="profile-grid">
+        <div><label for="studentName">👨‍💻 1. Escribe tu nombre</label><input id="studentName" maxlength="40" placeholder="Ej. Juan Pérez"></div>
+        <div><label for="studentGroup">🏫 2. Elige tu grupo</label><select id="studentGroup"><option>3.º A</option><option>3.º B</option><option>3.º C</option><option>3.º D</option><option>Otro grupo</option></select></div>
+      </div>
+      <div class="profile-actions"><button onclick="createProfile()">🚀 ENTRAR A MI PARTIDA</button><button class="secondary" onclick="showImport()">🔄 YA TENGO UN CÓDIGO</button></div>
+      <div id="profileMsg" class="profile-msg"></div>
+      <div id="profileList" class="profile-list"></div>
+    </div>
+    <div id="importArea" style="display:none">
+      <h3 style="margin:0 0 8px">🔄 Recuperar mi partida</h3><p style="text-align:left;margin-bottom:12px">Escribe tu nombre, tu grupo y el código de 6 caracteres que anotaste en tu cuaderno.</p>
+      <div class="profile-grid">
+        <div><label for="importName">👨‍💻 Tu nombre</label><input id="importName" maxlength="40" placeholder="Ej. Juan Pérez"></div>
+        <div><label for="importGroup">🏫 Tu grupo</label><select id="importGroup"><option>3.º A</option><option>3.º B</option><option>3.º C</option><option>3.º D</option><option>Otro grupo</option></select></div>
+      </div>
+      <label for="importCode">🔐 Tu código de partida</label>
+      <input id="importCode" maxlength="6" placeholder="Ej. 7K4M9P" style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-weight:900">
+      <div class="profile-actions"><button onclick="importProgress()">🚀 RECUPERAR MI PARTIDA</button><button class="secondary" onclick="hideImport()">⬅ Volver</button></div>
+      <div id="importMsg" class="profile-msg"></div>
+    </div>
+  </div>
+</div>
+<div id="app">
+<div class="top">
+  <div class="logo"><div class="logo-bot">🤖</div><div><h1>CodeQuest Galaxy</h1><div class="subtitle">🚀 Entrena tu mente • Programa • Resuelve • Avanza</div></div></div>
+  <div class="stats"><span class="pill">👤 <b id="playerName">Sin perfil</b></span><span class="pill">⭐ Puntos: <b id="score">0</b></span><span class="pill">🏅 Misiones: <b id="done">0</b>/20</span></div>
+</div>
+<div class="save-note">💾 <b>Tu partida se guarda al completar cada nivel.</b> Al terminar la clase, pulsa <b>💾 Guardar mi partida</b> y guarda tu código.</div><div class="panel">
+<div class="levels" id="levels"></div>
+<div class="mission"><div><h2 id="title"></h2><p id="desc" class="desc"></p></div><div>🧠 <b>¡Piensa como programador!</b></div></div>
+<div class="hint" id="hint"></div><div class="hint tip">💡 <b>Regla de la misión:</b> cada línea es una instrucción. Planifica tu ruta antes de pulsar <b>Ejecutar</b>.</div>
+<div class="game">
+<div class="board"><div class="board-head"><span>🌌 ZONA DE AVENTURA</span><span>🤖 Tu robot</span></div><div class="grid" id="grid"></div><div class="editor"><label for="codeInput"><b>⌨️ Programa tu robot</b></label><textarea id="codeInput" spellcheck="false" aria-label="Editor de código" placeholder="// Ejemplo:\nmoveRight();\nmoveRight();\nmoveDown();"></textarea><div class="syntax">Comandos: <code>moveRight()</code> <code>moveLeft()</code> <code>moveUp()</code> <code>moveDown()</code> <code>attack()</code></div></div></div>
+<div class="side-card"><h3 class="side-title">🧩 Tu programa</h3><div class="code" id="code">Tu programa aparecerá aquí cuando ejecutes el reto.</div><div class="actions"><button id="run">▶ Ejecutar</button><button id="clear" class="secondary">↺ Borrar</button><button id="next">Siguiente nivel ➜</button><button id="profileBtn" class="secondary" onclick="openProfileManager()">👤 Cambiar alumno</button><button id="exportBtn" onclick="exportProgress()">💾 Guardar mi partida</button><button id="reset" class="secondary" onclick="resetCurrentProfile()">🔄 Reiniciar mi partida</button></div><div class="message" id="msg" aria-live="polite"></div><div class="student-help">💡 <b>¿Terminó la clase?</b><br>1️⃣ Pulsa <b>💾 Guardar mi partida</b>.<br>2️⃣ Copia tu código o toma una captura.<br>3️⃣ En la próxima clase pulsa <b>👤 Cambiar alumno</b>, elige <b>🔄 YA TENGO UN CÓDIGO</b> y escribe tus datos + tu código de 6 caracteres.</div></div>
+</div>
+</div>
+</div>
+<script>
+const levels=[{"t":"Misión 1: Ruta de entrenamiento","d":"Llega al portal siguiendo una secuencia con varios giros.","h":"Planea todos tus movimientos antes de ejecutar.","rows":6,"cols":8,"start":[5,0],"goal":[0,6],"walls":[[4,1],[3,1],[3,3],[2,3],[2,5]]},{"t":"Misión 2: Camino con obstáculos","d":"Encuentra una ruta alternativa hasta el portal.","h":"Cuando una ruta está bloqueada, busca otra.","rows":7,"cols":9,"start":[6,0],"goal":[0,8],"walls":[[5,1],[4,1],[3,1],[3,3],[4,3],[5,3],[2,5],[3,5],[4,5],[1,7]]},{"t":"Misión 3: Cristal perdido","d":"Recoge el cristal y después llega al portal.","h":"No basta con llegar: primero debes recoger el cristal.","rows":7,"cols":9,"start":[6,0],"goal":[0,8],"walls":[[5,1],[4,1],[2,2],[2,3],[2,4],[4,5],[5,5],[1,7]],"coins":[[3,4]]},{"t":"Misión 4: Poder de repetición","d":"Llega al portal usando movimientos repetidos.","h":"Prueba moveRight(3) o repetir(3){moveRight()}.","rows":5,"cols":10,"start":[4,0],"goal":[0,9],"walls":[[3,2],[2,2],[1,2],[1,6],[2,6],[3,6]]},{"t":"Misión 5: Dos cristales","d":"Recoge los dos cristales antes de llegar al portal.","h":"Divide el reto en pequeñas rutas.","rows":7,"cols":10,"start":[6,0],"goal":[0,9],"walls":[[5,1],[4,1],[3,1],[3,4],[4,4],[5,4],[1,6],[2,6],[3,6],[4,8]],"coins":[[4,3],[2,7]]},{"t":"Misión 6: El guardián","d":"Llega junto al enemigo y usa attack() correctamente.","h":"attack() solo funciona cuando estás junto al enemigo.","rows":7,"cols":10,"start":[6,0],"goal":[0,9],"walls":[[5,1],[4,1],[3,1],[3,3],[4,3],[5,3],[2,5],[3,5],[4,5],[1,7]],"enemies":[[1,8]]},{"t":"Misión 7: Cristal y guardián","d":"Recoge el cristal, derrota al guardián y llega al portal.","h":"Hay tres objetivos: cristal, ataque y portal.","rows":8,"cols":11,"start":[7,0],"goal":[0,10],"walls":[[6,1],[5,1],[4,1],[2,3],[3,3],[4,3],[5,3],[2,6],[3,6],[4,6],[5,8],[6,8],[1,9]],"coins":[[4,5]],"enemies":[[1,8]]},{"t":"Misión 8: Laberinto","d":"Encuentra la salida de un laberinto con varios cambios de dirección.","h":"Piensa por tramos y usa repeticiones para los pasillos largos.","rows":9,"cols":11,"start":[8,0],"goal":[0,10],"walls":[[7,1],[6,1],[5,1],[5,3],[6,3],[7,3],[3,4],[4,4],[5,4],[1,6],[2,6],[3,6],[4,6],[5,8],[6,8],[7,8],[2,9],[2,10]]},{"t":"Misión 9: Ruta eficiente","d":"Llega al portal usando como máximo 24 movimientos.","h":"No siempre gana quien escribe más: busca una ruta eficiente.","rows":8,"cols":11,"start":[7,0],"goal":[0,10],"walls":[[6,1],[5,1],[4,1],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,6],[2,6],[3,6],[4,8],[5,8],[6,8],[1,9]],"maxMoves":24},{"t":"Misión 10: Tres cristales","d":"Recoge tres cristales y llega al portal.","h":"Organiza tu ruta para visitar todos los objetivos.","rows":9,"cols":12,"start":[8,0],"goal":[0,11],"walls":[[7,1],[6,1],[5,1],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,7],[2,7],[3,7],[6,8],[7,8],[4,10],[5,10]],"coins":[[6,3],[3,6],[5,9]]},{"t":"Misión 11: Dos guardianes","d":"Derrota a los dos guardianes antes de llegar al portal.","h":"Debes acercarte a cada enemigo y usar attack().","rows":9,"cols":12,"start":[8,0],"goal":[0,11],"walls":[[7,1],[6,1],[5,1],[3,2],[4,2],[5,2],[3,5],[4,5],[5,5],[1,7],[2,7],[3,7],[5,10],[6,10],[7,10]],"enemies":[[5,4],[2,9]]},{"t":"Misión 12: Secuencia obligatoria","d":"Recoge dos cristales, derrota al guardián y llega al portal.","h":"Los objetivos deben cumplirse antes de terminar.","rows":10,"cols":12,"start":[9,0],"goal":[0,11],"walls":[[8,1],[7,1],[6,1],[6,4],[7,4],[8,4],[2,3],[3,3],[4,3],[5,6],[6,6],[7,6],[2,8],[3,8],[4,8],[5,10],[6,10],[7,10]],"coins":[[7,3],[3,7]],"enemies":[[1,9]]},{"t":"Misión 13: Repetición experta","d":"Resuelve un mapa largo usando repeticiones para reducir instrucciones.","h":"Busca patrones: varios pasos iguales pueden convertirse en una sola instrucción.","rows":10,"cols":13,"start":[9,0],"goal":[0,12],"walls":[[8,1],[7,1],[6,1],[6,3],[7,3],[8,3],[2,4],[3,4],[4,4],[5,6],[6,6],[7,6],[1,8],[2,8],[3,8],[4,10],[5,10],[6,10],[7,11]],"maxMoves":30},{"t":"Misión 14: El gran desvío","d":"El camino directo está bloqueado. Encuentra una ruta larga pero segura.","h":"No te apresures: observa el mapa antes de programar.","rows":10,"cols":13,"start":[9,0],"goal":[0,12],"walls":[[8,1],[7,1],[6,1],[5,1],[5,3],[6,3],[7,3],[8,3],[2,4],[3,4],[4,4],[5,4],[1,7],[2,7],[3,7],[4,7],[5,7],[6,9],[7,9],[8,9],[2,11],[3,11],[4,11]]},{"t":"Misión 15: Cristales y guardianes","d":"Recoge dos cristales y derrota a dos guardianes.","h":"Planifica el orden de tus objetivos para no repetir caminos innecesariamente.","rows":10,"cols":14,"start":[9,0],"goal":[0,13],"walls":[[8,1],[7,1],[6,1],[4,2],[5,2],[6,2],[6,4],[7,4],[8,4],[2,5],[3,5],[4,5],[6,7],[7,7],[8,7],[2,9],[3,9],[4,9],[5,12],[6,12],[7,12]],"coins":[[7,3],[3,8]],"enemies":[[5,5],[1,11]]},{"t":"Misión 16: Presupuesto de movimientos","d":"Completa el reto usando como máximo 34 movimientos.","h":"Una buena solución no solo funciona: también puede ser eficiente.","rows":10,"cols":14,"start":[9,0],"goal":[0,13],"walls":[[8,1],[7,1],[6,1],[5,3],[6,3],[7,3],[2,4],[3,4],[4,4],[5,6],[6,6],[7,6],[1,8],[2,8],[3,8],[4,10],[5,10],[6,10],[7,10],[2,12],[3,12],[4,12]],"coins":[[6,4]],"maxMoves":34},{"t":"Misión 17: Mapa de precisión","d":"Recoge tres cristales, derrota un guardián y llega al portal.","h":"Cada movimiento cuenta. Diseña tu ruta antes de ejecutarla.","rows":11,"cols":14,"start":[10,0],"goal":[0,13],"walls":[[9,1],[8,1],[7,1],[7,3],[8,3],[9,3],[3,4],[4,4],[5,4],[6,6],[7,6],[8,6],[2,8],[3,8],[4,8],[5,10],[6,10],[7,10],[3,12],[4,12],[5,12],[7,13]],"coins":[[8,3],[5,7],[2,10]],"enemies":[[1,12]]},{"t":"Misión 18: Estrategia avanzada","d":"Combina objetivos, obstáculos, repetición y eficiencia.","h":"Antes de ejecutar, escribe mentalmente la ruta completa.","rows":11,"cols":15,"start":[10,0],"goal":[0,14],"walls":[[9,1],[8,1],[7,1],[6,2],[7,2],[8,2],[7,4],[8,4],[9,4],[3,5],[4,5],[5,5],[6,7],[7,7],[8,7],[2,9],[3,9],[4,9],[5,11],[6,11],[7,11],[3,13],[4,13],[5,13]],"coins":[[8,3],[4,8]],"enemies":[[2,12]],"maxMoves":40},{"t":"Misión 19: Maestro de la ruta","d":"Completa todos los objetivos con una ruta cuidadosamente planificada.","h":"Usa repeticiones, evita rodeos y piensa como un programador.","rows":11,"cols":15,"start":[10,0],"goal":[0,14],"walls":[[9,1],[8,1],[7,1],[5,2],[6,2],[7,2],[7,4],[8,4],[9,4],[2,5],[3,5],[4,5],[6,7],[7,7],[8,7],[3,9],[4,9],[5,9],[6,11],[7,11],[8,11],[3,13],[4,13],[5,13]],"coins":[[8,3],[5,7],[2,11]],"enemies":[[6,5],[1,13]],"maxMoves":42},{"t":"Misión 20: Gran maestro CodeQuest","d":"Recoge los tres cristales, derrota a los dos guardianes y llega al portal dentro del límite de movimientos.","h":"Planifica, simplifica y revisa tu programa antes de ejecutarlo. ¡Este es el desafío final!","rows":12,"cols":16,"start":[11,0],"goal":[0,15],"walls":[[10,1],[9,1],[8,1],[7,2],[8,2],[9,2],[9,4],[10,4],[7,4],[3,5],[4,5],[5,5],[6,7],[7,7],[8,7],[9,7],[2,9],[3,9],[4,9],[5,11],[6,11],[7,11],[8,13],[9,13],[10,13],[3,14],[4,14],[5,14]],"coins":[[9,3],[5,8],[2,12]],"enemies":[[7,6],[1,14]],"maxMoves":48}];
+let current=0, score=0, completed=new Set(), hero=[];
+const $=id=>document.getElementById(id);
+
+const SAVE_PREFIX="codequest_junior_perfiles_v4_";
+let currentProfile=null;
+function profileKey(id){return SAVE_PREFIX+id;}
+function makeProfileId(name,group){return (group+"__"+name.trim().toLowerCase()).normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,70)}
+function getProfiles(){try{return JSON.parse(localStorage.getItem(SAVE_PREFIX+"_index")||"[]")}catch(e){return []}}
+function setProfiles(a){localStorage.setItem(SAVE_PREFIX+"_index",JSON.stringify(a))}
+function profileData(){return {name:currentProfile.name,group:currentProfile.group,completed:[...completed],score,current}}
+function saveProfile(){if(!currentProfile)return;localStorage.setItem(profileKey(currentProfile.id),JSON.stringify({...profileData(),id:currentProfile.id}));localStorage.setItem(SAVE_PREFIX+"_last",currentProfile.id);let a=getProfiles();if(!a.some(x=>x.id===currentProfile.id)){a.push({id:currentProfile.id,name:currentProfile.name,group:currentProfile.group});setProfiles(a)}}
+function loadProfile(id){let raw=localStorage.getItem(profileKey(id));if(!raw)return false;try{let d=JSON.parse(raw);currentProfile={id:d.id||id,name:d.name,group:d.group};completed=new Set(Array.isArray(d.completed)?d.completed.map(Number):[]);score=Number(d.score)||0;current=Number.isInteger(d.current)?d.current:0;while(current>0&&!completed.has(current-1))current--;updateProfileUI();load();return true}catch(e){return false}}
+function createProfile(){let name=$("studentName").value.trim(),group=$("studentGroup").value;if(!name){$("profileMsg").textContent="✏️ Primero escribe tu nombre.";return}let id=makeProfileId(name,group),a=getProfiles();let existing=a.find(x=>x.id===id);if(existing){loadProfile(id);closeProfileOverlay();return}currentProfile={id,name,group};completed=new Set();score=0;current=0;saveProfile();updateProfileUI();load();closeProfileOverlay()}
+function updateProfileUI(){if(currentProfile){$("playerName").textContent=currentProfile.name+" · "+currentProfile.group}}
+function openProfileManager(){renderProfileList();$("profileForm").style.display="block";$("importArea").style.display="none";$("profileOverlay").style.display="flex"}
+function closeProfileOverlay(){$("profileOverlay").style.display="none"}
+function renderProfileList(){let a=getProfiles();$("profileList").innerHTML=a.length?'<div style="font-weight:900;margin-top:8px">Perfiles guardados en esta computadora:</div>'+a.map(x=>`<div class="profile-item"><div><b>${escapeHtml(x.name)}</b><br><small>${escapeHtml(x.group)}</small></div><button onclick="selectProfile('${x.id.replace(/'/g,"\\'")}')">Entrar</button></div>`).join(""):''}
+function selectProfile(id){if(loadProfile(id))closeProfileOverlay()}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function showImport(){$("profileForm").style.display="none";$("importArea").style.display="block"}
+function hideImport(){$("profileForm").style.display="block";$("importArea").style.display="none"}
+const SHORT_ALPHABET="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+function shortHash(text){let h=2166136261;for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function shortIdentity(text){let n=shortHash(text),out="";for(let i=0;i<4;i++){out+=SHORT_ALPHABET[n%SHORT_ALPHABET.length];n=Math.floor(n/SHORT_ALPHABET.length)}return out}
+function makeShortCode(name,group,count){let identity=shortIdentity((group+'__'+name.trim().toLowerCase()).normalize('NFD').replace(/[\u0300-\u036f]/g,''));let level=SHORT_ALPHABET[count];let check=SHORT_ALPHABET[(shortHash(identity+level+"CQ")%SHORT_ALPHABET.length)];return identity+level+check}
+function decodeShortCode(code){code=code.trim().toUpperCase();if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code))throw new Error('bad code');let identity=code.slice(0,4),level=SHORT_ALPHABET.indexOf(code[4]);let check=SHORT_ALPHABET[(shortHash(identity+code[4]+"CQ")%SHORT_ALPHABET.length)];if(level<0||level>20||code[5]!==check)throw new Error('bad code');return{identity,completedCount:level}}
+function exportProgress(){if(!currentProfile){openProfileManager();return}saveProfile();let code=makeShortCode(currentProfile.name,currentProfile.group,completed.size);let old=document.querySelector(".export-box");if(old)old.remove();let box=document.createElement("div");box.className="export-box";box.innerHTML='<h3 style="margin:0 0 6px">💾 ¡Partida guardada!</h3><p style="margin:4px 0"><b>✏️ Escribe este código de 6 caracteres en tu cuaderno:</b></p><div class="export-code" id="myProgressCode" style="font-size:28px;letter-spacing:5px;text-align:center;font-weight:900;word-break:normal">'+code+'</div><div class="profile-actions" style="margin-top:8px"><button onclick="copyProgressCode()">📋 COPIAR CÓDIGO</button></div><small>📸 También puedes tomar una captura. En la próxima clase necesitarás tu nombre, grupo y este código.</small>';$('reset').parentElement.insertAdjacentElement("afterend",box);box.scrollIntoView({behavior:"smooth",block:"nearest"})}
+function copyProgressCode(){let el=$("myProgressCode");if(!el)return;let code=el.textContent.trim();if(navigator.clipboard){navigator.clipboard.writeText(code).then(()=>{$("msg").textContent="✅ ¡Código copiado! Ahora guárdalo en Classroom o en una captura."}).catch(()=>{$("msg").textContent="📋 Selecciona y copia el código."})}else{$("msg").textContent="📋 Selecciona y copia el código."}}
+function importProgress(){let code=$("importCode").value.trim().toUpperCase(),name=$("importName").value.trim(),group=$("importGroup").value;if(!name){$("importMsg").textContent="✏️ Escribe tu nombre.";return}if(!code){$("importMsg").textContent="📋 Escribe tu código de 6 caracteres.";return}try{let d=decodeShortCode(code);let clean=(group+'__'+name.trim().toLowerCase()).normalize('NFD').replace(/[\u0300-\u036f]/g,'');let expected=shortIdentity(clean);if(d.identity!==expected){$("importMsg").textContent="❌ El código no corresponde a ese nombre y grupo. Revisa tus datos.";return}let id=makeProfileId(name,group);currentProfile={id,name,group};completed=new Set();for(let i=0;i<d.completedCount;i++)completed.add(i);score=d.completedCount*100;current=Math.min(d.completedCount,19);saveProfile();updateProfileUI();load();closeProfileOverlay();$("importCode").value="";$("importName").value=""}catch(e){$("importMsg").textContent="❌ Código incorrecto. Debe tener 6 letras o números."}}
+function resetProgress(){if(!currentProfile)return;localStorage.removeItem(profileKey(currentProfile.id));completed=new Set();score=0;current=0;saveProfile();load()}
+function loadProgress(){let last=localStorage.getItem(SAVE_PREFIX+"_last");if(last&&loadProfile(last))return;let a=getProfiles();if(a.length)loadProfile(a[0].id);else openProfileManager()}
+function renderLevels(){
+ $("levels").innerHTML=levels.map((_,i)=>{let u=i===0||completed.has(i-1);return `<button class="lv ${i===current?'active':''} ${completed.has(i)?'done':''} ${!u?'locked':''}" data-i="${i}" ${!u?'disabled':''}>${!u?'🔒 ':''}${i+1}</button>`}).join("");
+ document.querySelectorAll(".lv").forEach(b=>{if(!b.disabled)b.onclick=()=>{current=+b.dataset.i;saveProfile();load()}})
+}
+function updateNext(){$("next").disabled=current>=levels.length-1||!completed.has(current)}
+function load(){let l=levels[current];hero=[...l.start];$("codeInput").value="";$("title").textContent=l.t;$("desc").textContent=l.d;$("hint").textContent="💡 "+l.h;$("msg").textContent="";$("score").textContent=score;$("done").textContent=completed.size;updateNext();draw();renderLevels();showCode()}
+function draw(){let l=levels[current],coins=l.coins||[],enemies=l.enemies||[];$("grid").style.gridTemplateColumns=`repeat(${l.cols},1fr)`;$("grid").innerHTML="";for(let r=0;r<l.rows;r++)for(let c=0;c<l.cols;c++){let x=document.createElement("div");x.className="cell";if(l.walls.some(w=>w[0]===r&&w[1]===c))x.classList.add("wall"),x.textContent="🪨";if(l.goal[0]===r&&l.goal[1]===c)x.classList.add("goal"),x.textContent="🌀";if(coins.some(w=>w[0]===r&&w[1]===c))x.classList.add("coin"),x.textContent="💎";if(enemies.some(w=>w[0]===r&&w[1]===c))x.classList.add("enemy"),x.textContent="👾";if(hero[0]===r&&hero[1]===c)x.className+=" hero",x.textContent="🤖";$("grid").appendChild(x)}}
+function parseProgram(){let raw=$("codeInput").value.replace(/\/\/.*$/gm,"").trim();if(!raw)return{error:"Escribe al menos una instrucción."};let lines=raw.split(/\n|;/).map(s=>s.trim()).filter(Boolean),A={"moveRight()":"R","moveLeft()":"L","moveUp()":"U","moveDown()":"D","attack()":"A","moverDerecha()":"R","moverIzquierda()":"L","moverArriba()":"U","moverAbajo()":"D","atacar()":"A"},out=[];for(let i=0;i<lines.length;i++){let z=lines[i].replace(/\s+/g,""),m=z.match(/^(moveRight|moveLeft|moveUp|moveDown)\((\d+)\)$/);if(m){let q={moveRight:"R",moveLeft:"L",moveUp:"U",moveDown:"D"}[m[1]];for(let k=0;k<Math.min(30,+m[2]);k++)out.push(q);continue}if(A[z]){out.push(A[z]);continue}let r=z.match(/^repetir\((\d+)\)\{(.+)\}$/i);if(r){let inn=r[2].split(",").map(x=>x.trim()),tmp=[];for(let item of inn){let mm=item.match(/^(moveRight|moveLeft|moveUp|moveDown)\((\d+)\)$/);if(mm){let q={moveRight:"R",moveLeft:"L",moveUp:"U",moveDown:"D"}[mm[1]];for(let k=0;k<Math.min(30,+mm[2]);k++)tmp.push(q)}else if(A[item])tmp.push(A[item]);else return{error:"Línea "+(i+1)+": comando no reconocido."}}for(let k=0;k<Math.min(30,+r[1]);k++)out.push(...tmp);continue}return{error:"Línea "+(i+1)+": comando no reconocido."}}return{program:out}}
+function run(){let p0=parseProgram();if(p0.error){$("msg").textContent="❌ "+p0.error;return}let l=levels[current],coins=l.coins||[],enemies=l.enemies||[],p=[...l.start],cg=new Set(),eg=new Set(),prog=p0.program;if(l.maxMoves&&prog.length>l.maxMoves){$("msg").textContent="⏱️ Te pasaste del límite de "+l.maxMoves+" movimientos.";return}for(let i=0;i<prog.length;i++){let cmd=prog[i];if(cmd==="A"){let j=enemies.findIndex(e=>Math.abs(p[0]-e[0])+Math.abs(p[1]-e[1])===1);if(j<0){$("msg").textContent="⚔️ Debes estar junto al guardián para atacar.";return}eg.add(j)}else{let q=[...p];if(cmd==="R")q[1]++;if(cmd==="L")q[1]--;if(cmd==="U")q[0]--;if(cmd==="D")q[0]++;if(q[0]<0||q[0]>=l.rows||q[1]<0||q[1]>=l.cols||l.walls.some(w=>w[0]===q[0]&&w[1]===q[1])){$("msg").textContent="🧱 ¡Chocaste con un obstáculo!";return}p=q;coins.forEach((c,j)=>{if(p[0]===c[0]&&p[1]===c[1])cg.add(j)})}}hero=p;draw();let goal=p[0]===l.goal[0]&&p[1]===l.goal[1];if(goal&&cg.size===coins.length&&eg.size===enemies.length){if(!completed.has(current)){completed.add(current);score+=100}saveProfile();$("score").textContent=score;$("done").textContent=completed.size;$("msg").textContent=current===19?"🏆 ¡Completaste los 20 niveles! ¡Eres un gran programador!":"🎉 ¡Nivel completado! 💾 Tu progreso ya está guardado. Ahora puedes avanzar al siguiente nivel." ;updateNext();renderLevels()}else if(goal)$("msg").textContent="🏁 Llegaste al portal, pero todavía faltan objetivos.";else $("msg").textContent="🔎 Sigue intentando: aún no llegas al portal."}
+function showCode(){let v=$("codeInput").value.trim();$("code").textContent=v||"Tu programa aparecerá aquí cuando ejecutes el reto."}
+function clearProg(){$("codeInput").value="";hero=[...levels[current].start];draw();showCode();$("msg").textContent=""}
+function resetCurrentProfile(){if(!currentProfile)return;if(!confirm("¿Seguro que quieres borrar tu progreso? Empezarás desde el nivel 1."))return;localStorage.removeItem(profileKey(currentProfile.id));completed=new Set();score=0;current=0;saveProfile();load();$("msg").textContent="🔄 Tu partida fue reiniciada. ¡Comenzamos desde el nivel 1!"}
+$("codeInput").addEventListener("input",showCode);$("run").onclick=run;$("clear").onclick=clearProg;$("next").onclick=()=>{if(completed.has(current)&&current<19){current++;saveProfile();load()}};loadProgress();if(currentProfile)load();
+
+</script>
+</body>
+</html>
