@@ -36,3 +36,5 @@ jobs:
         uses: actions/deploy-pages@v4
 
 # Actualización automática para publicar la versión con progreso.
+
+# Forzar publicación de la versión restaurada de 20 niveles.
